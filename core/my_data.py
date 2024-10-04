@@ -21,12 +21,20 @@ def sql_table(conn):
         )
     """)
     conn.commit()
+    
 
 # تابع برای اضافه کردن کاربر به جدول
-def add_user(conn, first_name, last_name, hire_date):
+def add_user(conn, user_id, first_name, last_name, hire_date):
     cursorObj = conn.cursor()
-    cursorObj.execute("INSERT INTO members (first_name, last_name, hiredate) VALUES (?, ?, ?)", (first_name, last_name, hire_date))
+    cursorObj.execute("INSERT INTO members (id,first_name, last_name, hiredate) VALUES (?, ?, ?, ?)", (user_id, first_name, last_name, hire_date))
     conn.commit()
+    
+    
+def user_exists(conn, user_id):
+    cursorObj = conn.cursor()
+    cursorObj.execute("SELECT * FROM members WHERE id = ?", (user_id,))
+    row = cursorObj.fetchone()
+    return row is not None    
 
 def close_connection(conn):
     if conn:
